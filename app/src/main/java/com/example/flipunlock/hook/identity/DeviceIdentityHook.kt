@@ -78,12 +78,14 @@ object DeviceIdentityHook : BaseHook() {
             // [DISABLED 2026-08-11 实验] 属性值 hook 注释——只保留 isFlipDevice→false，
             // 验证 isFlipDevice 单独是否触发 CWB 崩溃（对照：属性层/属性 hook 会触发）。
             // hookSystemProperties(param.classLoader)
-            val cls = param.classLoader.loadClass("miui.util.MiuiMultiDisplayTypeInfo")
-            runCatching {
-                val method = cls.method("isFlipDevice")
-                hook(method, replaceResult(false))
-                log("DeviceIdentity: blocked MiuiMultiDisplayTypeInfo.isFlipDevice")
-            }
+            // [DISABLED 2026-08-11 实验2] isFlipDevice 也注释——本轮完全不用 hook 层身份伪造，
+            // 只靠属性层模块(flipunlock_prop, multi_display_type=1)验证 CWB 崩溃触发源。
+            // val cls = param.classLoader.loadClass("miui.util.MiuiMultiDisplayTypeInfo")
+            // runCatching {
+            //     val method = cls.method("isFlipDevice")
+            //     hook(method, replaceResult(false))
+            //     log("DeviceIdentity: blocked MiuiMultiDisplayTypeInfo.isFlipDevice")
+            // }
             // isFoldDevice — NOT hooked (validated by 262 elimination: not needed)
             // runCatching {
             //     val method = cls.method("isFoldDevice")
@@ -106,11 +108,12 @@ object DeviceIdentityHook : BaseHook() {
         safeHook("DeviceIdentityHook-system_server") {
             // [DISABLED 2026-08-11 实验] 属性值 hook 注释，仅保留 isFlipDevice→false
             // hookSystemProperties(param.classLoader)
-            runCatching {
-                val cls = param.classLoader.loadClass("miui.util.MiuiMultiDisplayTypeInfo")
-                hook(cls.method("isFlipDevice"), replaceResult(false))
-                log("DeviceIdentity(system_server): blocked MiuiMultiDisplayTypeInfo.isFlipDevice")
-            }.onFailure { log("DeviceIdentity(system_server): isFlipDevice hook failed", it) }
+            // [DISABLED 2026-08-11 实验2] isFlipDevice 注释（同实验2）
+            // runCatching {
+            //     val cls = param.classLoader.loadClass("miui.util.MiuiMultiDisplayTypeInfo")
+            //     hook(cls.method("isFlipDevice"), replaceResult(false))
+            //     log("DeviceIdentity(system_server): blocked MiuiMultiDisplayTypeInfo.isFlipDevice")
+            // }.onFailure { log("DeviceIdentity(system_server): isFlipDevice hook failed", it) }
         }
     }
 

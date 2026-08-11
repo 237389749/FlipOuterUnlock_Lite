@@ -32,7 +32,7 @@ internal var module: Main? = null
 class Main : XposedModule() {
 
     private val hooks = listOf(
-        DeviceIdentityHook,  // isFlipDevice→false + 属性读取 hook（wildcard，豁免 firstPackage）
+        // DeviceIdentityHook, // [DISABLED 2026-08-11 实验2] isFlipDevice/属性值 hook 全注释，只靠属性层模块
         SystemUiKeyguardFix, // systemui 崩溃环兜底（属性层配套，§38.1/38.2）
         FlashlightHook,      // 控制中心手电筒：跳过翻转对话框/传感器等待
         SFDeviceGestureHook, // 外屏上滑手势：isInSFDeviceFoldedMode→false + force_fsg_nav_bar→true
@@ -47,8 +47,8 @@ class Main : XposedModule() {
 
     override fun onSystemServerStarting(param: SystemServerStartingParam) {
         log("Main: onSystemServerStarting — gen=${DeviceGuard.gen}")
-        // 服务端身份伪造（§34.7）：flip2 zygisk 注入正常 → 生效；flip1 corepatch 断路 → 装不上（无害）
-        DeviceIdentityHook.hookSystemServer(param)
+        // [DISABLED 2026-08-11 实验2] 服务端身份伪造注释（DeviceIdentityHook 全注释）
+        // DeviceIdentityHook.hookSystemServer(param)
         // 旋转解除：DisplayRotationStubImpl 折叠态 LOCKED→FREE
         RotationFixHook.hook(param)
     }
