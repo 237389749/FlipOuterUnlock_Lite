@@ -23,6 +23,10 @@ import io.github.libxposed.api.XposedModuleInterface.SystemServerStartingParam
 object RotationFixHook {
 
     fun hook(param: SystemServerStartingParam) {
+        if (!Config.rotationFix) {
+            log("RotationFix: DISABLED by persist.flipunlock.rotation.fix")
+            return
+        }
         log("RotationFix: setting up")
         safeHook("RotationFix") {
             // ── ① AOSP DisplayRotation.setUserRotation(int,int,String)（主路径）──

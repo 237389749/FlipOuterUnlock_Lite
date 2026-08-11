@@ -14,6 +14,7 @@ object Config {
         "persist.flipunlock.enable",
         "persist.flipunlock.display.cutout",
         "persist.flipunlock.gesture.sf",
+        "persist.flipunlock.rotation.fix",
         "persist.flipunlock.identity.exclude.systemui",
     )
 
@@ -25,6 +26,9 @@ object Config {
 
     // SFDeviceGestureHook 开关（外屏上滑手势执行器，默认开）
     val gestureSf: Boolean get() = enabled && raw("persist.flipunlock.gesture.sf", true)
+
+    // RotationFixHook 开关（折叠态旋转解锁；副作用：会拦截控制中心磁贴切"锁定"）
+    val rotationFix: Boolean get() = enabled && raw("persist.flipunlock.rotation.fix", true)
 
     // Identity exclusion — SystemUI MUST stay excluded:
     // isFlipDevice→false inside SystemUI makes TinyKeyguardPanelViewController
