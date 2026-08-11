@@ -75,7 +75,9 @@ object DeviceIdentityHook : BaseHook() {
     override fun setupHooks(param: PackageReadyParam) {
         log("DeviceIdentityHook: loading for ${param.packageName}")
         safeHook("DeviceIdentityHook") {
-            hookSystemProperties(param.classLoader)
+            // [DISABLED 2026-08-11 实验] 属性值 hook 注释——只保留 isFlipDevice→false，
+            // 验证 isFlipDevice 单独是否触发 CWB 崩溃（对照：属性层/属性 hook 会触发）。
+            // hookSystemProperties(param.classLoader)
             val cls = param.classLoader.loadClass("miui.util.MiuiMultiDisplayTypeInfo")
             runCatching {
                 val method = cls.method("isFlipDevice")
@@ -102,7 +104,8 @@ object DeviceIdentityHook : BaseHook() {
     fun hookSystemServer(param: SystemServerStartingParam) {
         log("DeviceIdentityHook(system_server): gen=${DeviceGuard.gen}")
         safeHook("DeviceIdentityHook-system_server") {
-            hookSystemProperties(param.classLoader)
+            // [DISABLED 2026-08-11 实验] 属性值 hook 注释，仅保留 isFlipDevice→false
+            // hookSystemProperties(param.classLoader)
             runCatching {
                 val cls = param.classLoader.loadClass("miui.util.MiuiMultiDisplayTypeInfo")
                 hook(cls.method("isFlipDevice"), replaceResult(false))
