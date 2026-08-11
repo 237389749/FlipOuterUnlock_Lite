@@ -49,6 +49,10 @@ object SFDeviceGestureHook : BaseHook() {
     override val targetPackages = listOf("com.miui.home")
 
     override fun setupHooks(param: PackageReadyParam) {
+        if (!Config.gestureSf) {
+            log("SFDeviceGestureHook: DISABLED by persist.flipunlock.gesture.sf")
+            return
+        }
         safeHook("SFDeviceGestureHook") {
             val cls = param.classLoader.findClassUp(
                 "com.miui.home.recents.SpecialFDeviceGestureHelper")

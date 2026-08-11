@@ -13,6 +13,7 @@ object Config {
     private val keys = listOf(
         "persist.flipunlock.enable",
         "persist.flipunlock.display.cutout",
+        "persist.flipunlock.gesture.sf",
         "persist.flipunlock.identity.exclude.systemui",
     )
 
@@ -21,6 +22,9 @@ object Config {
 
     // CutoutAlwaysHook 备用开关（默认关闭；开启后所有 scope 包窗口不避让挖孔）
     val displayCutout: Boolean get() = enabled && raw("persist.flipunlock.display.cutout", false)
+
+    // SFDeviceGestureHook 开关（外屏上滑手势执行器，默认开）
+    val gestureSf: Boolean get() = enabled && raw("persist.flipunlock.gesture.sf", true)
 
     // Identity exclusion — SystemUI MUST stay excluded:
     // isFlipDevice→false inside SystemUI makes TinyKeyguardPanelViewController
