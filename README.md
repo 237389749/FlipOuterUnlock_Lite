@@ -11,6 +11,7 @@
 | `RotationFixHook` | system_server | 旋转解除：折叠态 `setUserRotation` LOCKED→FREE |
 | `DeviceIdentityHook` | *（wildcard） | isFlipDevice→false + hook 属性读取（multi_display_type→1，§38.9 免 root 虚拟改属性）；SystemUI 默认排除（§38.4） |
 | `SystemUiKeyguardFix` | com.android.systemui | systemui 崩溃环兜底：`providesTinyKeyguardViewPager` 强制 inflate（§38.1/38.2） |
+| `SFDeviceGestureHook` | com.miui.home | 外屏上滑手势：`isInSFDeviceFoldedMode`→false + `force_fsg_nav_bar`→true（NavStubView 执行器） |
 | `CutoutAlwaysHook` | *（wildcard） | **备用，默认关**：app 端 cutout 全屏四件套，`persist.flipunlock.display.cutout` 开启 |
 
 ## 开关

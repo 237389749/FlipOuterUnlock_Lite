@@ -2,6 +2,7 @@ package com.example.flipunlock
 
 import com.example.flipunlock.hook.identity.DeviceIdentityHook
 import com.example.flipunlock.hook.identity.CutoutAlwaysHook
+import com.example.flipunlock.hook.miuihome.SFDeviceGestureHook
 import com.example.flipunlock.hook.system_server.RotationFixHook
 import com.example.flipunlock.hook.systemui.FlashlightHook
 import com.example.flipunlock.hook.systemui.SystemUiKeyguardFix
@@ -24,6 +25,7 @@ internal var module: Main? = null
  *   3. DeviceIdentityHook  — isFlipDevice→false + hook 属性读取（multi_display_type→1，§38.9 免 root 虚拟改属性）
  *   4. SystemUiKeyguardFix — systemui 崩溃环兜底：providesTinyKeyguardViewPager 强制 inflate（§38.1/38.2）
  *   5. CutoutAlwaysHook    — 备用：app 端 cutout 全屏四件套（默认关闭，persist.flipunlock.display.cutout 开启）
+ *   6. SFDeviceGestureHook — 外屏上滑手势：miuihome 折叠态短路 NavStubView → isInSFDeviceFoldedMode→false + force_fsg_nav_bar→true
  *
  * 无 dexkit 依赖。工具类只保留被上述 hook 用到的部分。
  */
@@ -33,6 +35,7 @@ class Main : XposedModule() {
         DeviceIdentityHook,  // isFlipDevice→false + 属性读取 hook（wildcard，豁免 firstPackage）
         SystemUiKeyguardFix, // systemui 崩溃环兜底（属性层配套，§38.1/38.2）
         FlashlightHook,      // 控制中心手电筒：跳过翻转对话框/传感器等待
+        SFDeviceGestureHook, // 外屏上滑手势：isInSFDeviceFoldedMode→false + force_fsg_nav_bar→true
         CutoutAlwaysHook,    // [备用，Config.displayCutout] app 端 cutout 全屏四件套
     )
 
