@@ -6,7 +6,6 @@ import com.example.flipunlock.hook.identity.CutoutAlwaysHook
 import com.example.flipunlock.hook.miuihome.SFDeviceGestureHook
 import com.example.flipunlock.hook.system_server.RotationFixHook
 import com.example.flipunlock.hook.systemui.FlashlightHook
-import com.example.flipunlock.hook.systemui.QSColumnsFixHook
 import com.example.flipunlock.hook.systemui.SystemUiKeyguardFix
 import com.example.flipunlock.hook.util.Config
 import com.example.flipunlock.hook.util.DeviceGuard
@@ -38,7 +37,6 @@ class Main : XposedModule() {
         CameraCutoutFixHook, // 相机 NPE 修复：Display.getCutout() → 有效非 null DisplayCutout（属性1 副作用）
         SystemUiKeyguardFix, // systemui 崩溃环兜底（属性层配套，§38.1/38.2）
         FlashlightHook,      // 控制中心手电筒：跳过翻转对话框/传感器等待
-        QSColumnsFixHook,    // 控制中心磁贴列数宽度自适应（横屏/外屏 4 列挤占修复）
         SFDeviceGestureHook, // 外屏上滑手势：isInSFDeviceFoldedMode→false + force_fsg_nav_bar→true
         CutoutAlwaysHook,    // [备用，Config.displayCutout] app 端 cutout 全屏四件套
     )
