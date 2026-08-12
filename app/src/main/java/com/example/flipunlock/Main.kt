@@ -4,6 +4,7 @@ import com.example.flipunlock.hook.identity.DeviceIdentityHook
 import com.example.flipunlock.hook.identity.CameraCutoutFixHook
 import com.example.flipunlock.hook.identity.CutoutAlwaysHook
 import com.example.flipunlock.hook.miuihome.SFDeviceGestureHook
+import com.example.flipunlock.hook.system_server.Flip2CutoutLetterboxHook
 import com.example.flipunlock.hook.system_server.RotationFixHook
 import com.example.flipunlock.hook.systemui.FlashlightHook
 import com.example.flipunlock.hook.systemui.QSTileMinCountFixHook
@@ -52,8 +53,12 @@ class Main : XposedModule() {
     override fun onSystemServerStarting(param: SystemServerStartingParam) {
         log("Main: onSystemServerStarting — gen=${DeviceGuard.gen}")
         // [DISABLED 2026-08-11 实验2] 服务端身份伪造注释（DeviceIdentityHook 全注释）
+        // 注意：属性层模块(resetprop multi_display_type=1)已让 system_server 读属性 1 →
+        // isFlipDevice 已 false，hookSystemServer 冗余。若不用属性模块只靠 hook 可恢复。
         // DeviceIdentityHook.hookSystemServer(param)
-        // 旋转解除：DisplayRotationStubImpl 折叠态 LOCKED→FREE
+        // flip2 全屏：DISPLAY_CUTOUT letterbox 服务端解除（机型守护 FLIP2，§34.3）
+        Flip2CutoutLetterboxHook.hook(param)
+        // 旋转解除：MiuiOrientationImpl.getOrientationMode 折叠态开放旋转（§43.2.1）
         RotationFixHook.hook(param)
     }
 
