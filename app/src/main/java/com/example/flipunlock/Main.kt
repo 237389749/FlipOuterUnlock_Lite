@@ -11,6 +11,7 @@ import com.example.flipunlock.hook.systemui.QSTileMinCountFixHook
 import com.example.flipunlock.hook.systemui.SystemUiKeyguardFix
 import com.example.flipunlock.hook.util.Config
 import com.example.flipunlock.hook.util.DeviceGuard
+import com.example.flipunlock.hook.util.currentProcessName
 import com.example.flipunlock.hook.util.log
 import io.github.libxposed.api.XposedModule
 import io.github.libxposed.api.XposedModuleInterface.ModuleLoadedParam
@@ -46,12 +47,13 @@ class Main : XposedModule() {
 
     override fun onModuleLoaded(param: ModuleLoadedParam) {
         module = this
+        log("Main: onModuleLoaded — process=${currentProcessName()} (system_server? ${currentProcessName() == "system_server"})")
         Config.logConfig()
         DeviceGuard.logInfo()
     }
 
     override fun onSystemServerStarting(param: SystemServerStartingParam) {
-        log("Main: onSystemServerStarting — gen=${DeviceGuard.gen}")
+        log("Main: onSystemServerStarting — process=${currentProcessName()} gen=${DeviceGuard.gen}")
         // [DISABLED 2026-08-11 实验2] 服务端身份伪造注释（DeviceIdentityHook 全注释）
         // 注意：属性层模块(resetprop multi_display_type=1)已让 system_server 读属性 1 →
         // isFlipDevice 已 false，hookSystemServer 冗余。若不用属性模块只靠 hook 可恢复。
@@ -60,10 +62,15 @@ class Main : XposedModule() {
         Flip2CutoutLetterboxHook.hook(param)
         // 旋转解除：MiuiOrientationImpl.getOrientationMode 折叠态开放旋转（§43.2.1）
         RotationFixHook.hook(param)
+        log("Main: onSystemServerStarting — done")
     }
 
     override fun onPackageReady(param: PackageReadyParam) {
-        log("Main: onPackageReady pkg=${param.packageName} first=${param.isFirstPackage}")
+        val proc = currentProcessName()
+        if (proc == "system_server") {
+            log("Main: onPackageReady IN SYSTEM_SERVER pkg=${param.packageName} first=${param.isFirstPackage}")
+        }
+        log("Main: onPackageReady pkg=${param.packageName} first=${param.isFirstPackage} proc=$proc")
         hooks.forEach { hook ->
             val isWildcard = hook.targetPackages.contains("*")
             val isTargeted = hook.targetPackages.contains(param.packageName)
