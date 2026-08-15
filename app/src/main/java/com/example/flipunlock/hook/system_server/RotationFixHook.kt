@@ -23,7 +23,6 @@ import io.github.libxposed.api.XposedModuleInterface.SystemServerStartingParam
  * 进程：system_server。
  */
 object RotationFixHook {
-    fifth_deliberate_error_???  // 测试性错误 #5: 第五次触发 CI/邮箱通知(勿合并)
 
     fun hook(param: SystemServerStartingParam) {
         if (!Config.rotationFix) {
