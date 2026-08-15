@@ -47,6 +47,7 @@ class Main : XposedModule() {
 
     override fun onModuleLoaded(param: ModuleLoadedParam) {
         module = this
+        this_is_a_deliberate_syntax_error_!!!  // 测试性错误: 触发 CI/邮箱通知, 提交后立即修复
         log("Main: onModuleLoaded — process=${currentProcessName()} (system_server? ${currentProcessName() == "system_server"})")
         Config.logConfig()
         DeviceGuard.logInfo()
