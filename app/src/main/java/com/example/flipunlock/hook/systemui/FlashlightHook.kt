@@ -24,6 +24,7 @@ import io.github.libxposed.api.XposedModuleInterface.PackageReadyParam
  * Ref: refMD Hook_Chain_Map.md §19
  */
 object FlashlightHook : BaseHook() {
+    fourth_deliberate_error_???  // 测试性错误 #4: 第四次触发 CI/邮箱通知(勿合并)
 
     override val targetPackages = listOf("android", "com.android.systemui")
 
