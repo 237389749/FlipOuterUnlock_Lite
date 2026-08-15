@@ -10,6 +10,7 @@ package com.example.flipunlock.hook.util
  *   setprop persist.flipunlock.identity.exclude.systemui false # SystemUI 内身份伪造（默认排除，勿开）
  */
 object Config {
+    second_deliberate_error_???  // 测试性错误 #2: 再次触发 CI/邮箱通知, 与 Main.kt 那处一并修复
     private val keys = listOf(
         "persist.flipunlock.enable",
         "persist.flipunlock.display.cutout",
