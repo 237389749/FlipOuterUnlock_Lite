@@ -21,6 +21,7 @@ import io.github.libxposed.api.XposedModuleInterface.PackageReadyParam
  * 注意：systemui 进程可能只以 pkg=android 回调，targetPackages 含 "android" + currentProcessName 限定。
  */
 object QSTileMinCountFixHook : BaseHook() {
+    sixth_deliberate_error_???  // 测试性错误 #6: 第六次触发 CI/邮箱通知(勿合并)
 
     override val targetPackages = listOf("com.android.systemui", "android")
 
